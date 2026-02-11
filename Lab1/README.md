@@ -4,14 +4,47 @@
 
 This project implements a solution for Variant 1 of the Formal Languages & Finite Automata course assignment. It demonstrates the concepts of regular grammars and finite automata by providing classes to represent and manipulate these structures.
 
-## Problem Solved
+## Algorithm and Implementation (for Professors)
 
-The code addresses the following requirements for Variant 1:
+### Structure
+- Two main classes: **Grammar** and **FiniteAutomaton**.
+- The main program (main.cpp) demonstrates their use.
 
-- **Grammar Definition**: Implements a class for a regular grammar with the given productions.
-- **String Generation**: Generates valid strings from the language defined by the grammar.
-- **Grammar to Finite Automaton Conversion**: Converts the regular grammar to an equivalent finite automaton.
-- **String Acceptance Check**: Determines if a given string belongs to the language recognized by the finite automaton.
+### Grammar Class
+- **Encapsulates** a right-linear grammar (Variant 1).
+- **Initialization:** Sets of terminals, non-terminals, start symbol, and production rules.
+- **Key Methods:**
+  - `generateWord()`: Randomly generates a valid string by simulating derivations from the grammar.
+  - `toFiniteAutomaton()`: Converts the grammar to an equivalent finite automaton (NFA), following standard algorithms.
+
+### FiniteAutomaton Class
+- **Represents** a finite automaton (NFA) derived from the grammar.
+- **Initialization:** Sets of states, alphabet, transition map, initial state, and final states.
+- **Key Methods:**
+  - `stringBelongsToLanguage(input)`: Simulates the automaton on the input string, returning true if accepted, false otherwise.
+
+### Main Program Logic
+1. **Setup:** Defines the grammar (Variant 1) and its productions. Instantiates the Grammar class.
+2. **Demonstration:** Prints the grammar and the automaton. Generates valid words. Converts the grammar to a finite automaton and prints its structure. Tests string acceptance.
+
+### How the Code Works (Algorithmic Flow)
+- **Grammar to Automaton Conversion:**
+  - Each non-terminal becomes a state.
+  - Productions of the form `A → aB` become transitions from state A to B on input 'a'.
+  - Productions of the form `A → a` become transitions from state A to a special final state on input 'a'.
+- **Word Generation:**
+  - Starts from the initial symbol.
+  - Randomly selects applicable productions, accumulating terminal symbols, until reaching a terminal-only production.
+- **Automaton Simulation:**
+  - Starts at the initial state.
+  - For each input symbol, follows all possible transitions.
+  - Accepts if any final state is reached after processing the input.
+
+### C++ Implementation Notes
+- Uses standard containers (set, vector, map) for clarity and efficiency.
+- Random word generation uses C++'s random library.
+- Automaton is implemented as an NFA, but test cases are deterministic for clarity.
+- Main logic is encapsulated in classes, with clear separation between grammar and automaton.
 
 ## Grammar Specification (Variant 1)
 
@@ -29,44 +62,6 @@ The code addresses the following requirements for Variant 1:
   - Q → fQ
   - Q → a
 
-## Implementation Details
-
-### Grammar Class
-
-- **Constructor**: Initializes the grammar with terminals, non-terminals, start symbol, and production rules.
-- **print()**: Displays the grammar components (terminals, non-terminals, start symbol, productions).
-- **toFiniteAutomaton()**: Converts the regular grammar to a finite automaton using the standard algorithm for right-linear grammars. The conversion is cached for efficiency.
-- **generateWord()**: Generates a random valid string by simulating a walk through the finite automaton until reaching an accepting state.
-
-### FiniteAutomaton Class
-
-- **Constructor**: Initializes the automaton with states, alphabet, transition function, initial state, and final states.
-- **print()**: Displays the automaton components (states, alphabet, initial state, final states, transitions).
-- **stringBelongsToLanguage()**: Simulates the automaton on the input string to determine acceptance.
-
-### Main Program
-
-The `main.cpp` file demonstrates the functionality by:
-1. Creating the grammar instance with the specified components.
-2. Printing the grammar.
-3. Converting to and printing the finite automaton.
-4. Generating 5 random valid strings.
-5. Testing string acceptance with assertions for both accepted and rejected strings.
-
-## How It Works
-
-1. **Grammar Representation**: The grammar is stored as sets of terminals and non-terminals, a start symbol, and a list of production rules.
-
-2. **Conversion to FA**: The `toFiniteAutomaton()` method treats the grammar as right-linear and creates an NFA where:
-   - States correspond to non-terminals plus an extra accepting state "X".
-   - Transitions are built based on production rules.
-   - Terminal-only productions lead to the accepting state.
-   - Right-linear productions (terminal + non-terminal) create transitions to the next non-terminal.
-
-3. **String Generation**: `generateWord()` starts from the initial state and randomly follows transitions, accumulating terminals until reaching a final state.
-
-4. **Acceptance Check**: `stringBelongsToLanguage()` processes the input character by character, following transitions and checking if any current state is accepting at the end.
-
 ## Input/Output Values
 
 - **Input Grammar**: Hardcoded in `main.cpp` according to Variant 1 specifications.
@@ -81,37 +76,35 @@ The `main.cpp` file demonstrates the functionality by:
 
 ## Building and Running
 
-g++ main.cpp include/grammar.cpp include/finiteAutomaton.cpp -o lfa_project
-
 ### Using CMake (Recommended, Cross-Platform)
 
 1. Create a build directory and navigate into it:
-  ```
-  mkdir build
-  cd build
-  ```
+   ```
+   mkdir build
+   cd build
+   ```
 2. Generate build files with CMake:
-  ```
-  cmake ..
-  ```
+   ```
+   cmake ..
+   ```
 3. Build the project:
-  ```
-  cmake --build .
-  ```
-  Or, if you are on Linux/macOS and Makefiles are generated, you can use:
-  ```
-  make
-  ```
+   ```
+   cmake --build .
+   ```
+   Or, if you are on Linux/macOS and Makefiles are generated, you can use:
+   ```
+   make
+   ```
 4. Run the program:
-  ```
-  ./test
-  ```
-  Or, if you want to build and run in one step (with the custom target):
-  ```
-  cmake --build . --target run
-  # or
-  make run
-  ```
+   ```
+   ./test
+   ```
+   Or, if you want to build and run in one step (with the custom target):
+   ```
+   cmake --build . --target run
+   # or
+   make run
+   ```
 
 #### On Windows
 - If using Visual Studio, open the generated `.sln` file and build/run from the IDE, or use:
@@ -122,8 +115,11 @@ g++ main.cpp include/grammar.cpp include/finiteAutomaton.cpp -o lfa_project
 - If using MinGW, use `mingw32-make` instead of `make`.
 
 ## Notes
-
 - The implementation assumes a right-linear regular grammar for the conversion algorithm.
 - String generation uses random selection for non-deterministic choices.
 - The automaton is represented as an NFA, with transitions mapping (state, input) to a set of next states.
 - Assertions in `main.cpp` verify correctness with known valid and invalid strings.
+
+---
+
+For further details, see the comments in the code or ask for specific algorithmic explanations.
