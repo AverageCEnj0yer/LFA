@@ -29,6 +29,10 @@ public:
     const FiniteAutomaton& toFiniteAutomaton() const;
     void generateWord() const;
 
+    //============LAB 2==============
+    void classifyGrammar() const;
+    //============LAB 2==============
+
 private:
     // member variables
     std::set<Symbol> m_terminals{};

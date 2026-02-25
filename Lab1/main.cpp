@@ -51,5 +51,6 @@ int main()
     assert(!fa.stringBelongsToLanguage("bfee"));
     assert(!fa.stringBelongsToLanguage("befx"));
 
+    g.classifyGrammar();
     return 0;
 }
