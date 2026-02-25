@@ -1,0 +1,38 @@
+# Ignore build directories and generated files
+/build
+Lab*/build/
+
+# Ignore executables and binaries
+*.exe
+*.out
+*.o
+*.obj
+*.dll
+*.so
+*.a
+*.lib
+test
+lfa_project
+
+# Ignore CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Ignore user/editor files
+*.swp
+*.swo
+*.user
+*.log
+*.tmp
+.DS_Store
+.vscode/
+.idea/
+
+# Ignore core dumps
+core*
+
+# Ignore other OS-specific files
+Thumbs.db
