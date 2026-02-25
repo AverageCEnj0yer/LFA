@@ -1,4 +1,0 @@
-/home/gabi/University Stuff/LFA sem 4/Lab1/build/CMakeFiles/test.dir
-/home/gabi/University Stuff/LFA sem 4/Lab1/build/CMakeFiles/run.dir
-/home/gabi/University Stuff/LFA sem 4/Lab1/build/CMakeFiles/edit_cache.dir
-/home/gabi/University Stuff/LFA sem 4/Lab1/build/CMakeFiles/rebuild_cache.dir
