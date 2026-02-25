@@ -42,6 +42,8 @@ void FiniteAutomaton::print() const
             }
         }
     }
+    
+//this assumes that all symbols are a single character
 bool FiniteAutomaton::stringBelongsToLanguage(std::string_view input) const
 {
     std::set<Symbol> currentStates { m_initialState };

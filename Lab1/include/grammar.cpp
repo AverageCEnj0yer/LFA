@@ -3,15 +3,14 @@
 #include <set>
 
 
-Grammar::Grammar(std::set<Symbol> terminals, std::set<Symbol> nonterminals,  
+Grammar::Grammar(std::set<Symbol> terminals, std::set<Symbol> nonterminals,
                  Symbol start, std::vector<Production> productions)
-            : m_terminals {terminals}
-            , m_nonterminals {nonterminals}
-            , m_start {start}
-            , m_productions {productions} 
-    {
-
-    }
+    : m_terminals{terminals}
+    , m_nonterminals{nonterminals}
+    , m_start{start}
+    , m_productions{productions}
+{
+}
 FiniteAutomaton Grammar::getFiniteAutomaton() const
     {
         //======IMPORTANT - THIS ASSUMES THE GRAMMAR IS A RIGHT LINEAR REGULAR GRAMMAR======
@@ -29,7 +28,9 @@ FiniteAutomaton Grammar::getFiniteAutomaton() const
 
         for (const auto& production : m_productions)
         {
-            Symbol lhs = production.lhs;
+            // For now, only handle single-symbol LHS for FA conversion
+            if (production.lhs.size() != 1) continue;
+            Symbol lhs = production.lhs[0];
 
             if (production.rhs.empty())
             {
@@ -70,7 +71,10 @@ void Grammar::print() const
         std::cout << "Productions:\n";
         for (const auto& prod : m_productions)
         {
-            std::cout << "  " << prod.lhs << " → ";
+            std::cout << "  ";
+            for (const auto& sym : prod.lhs)
+                std::cout << sym;
+            std::cout << " → ";
             if (prod.rhs.empty())
             {
                 std::cout << "ε"; // epsilon for empty RHS
