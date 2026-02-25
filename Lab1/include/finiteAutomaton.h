@@ -6,7 +6,7 @@
 #include <set>
 #include <map>
 #include <iostream>
-
+class Grammar;
 
 using Symbol = std::string;
 
@@ -19,6 +19,10 @@ class FiniteAutomaton
     FiniteAutomaton() = default;
     void print() const;
     bool stringBelongsToLanguage(std::string_view) const;
+
+    //============LAB 2==============
+    Grammar toGrammar() const;
+    //============LAB 2==============
 
     //getters
     const std::set<Symbol>& states() const { return m_states; }

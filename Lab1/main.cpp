@@ -52,5 +52,7 @@ int main()
     assert(!fa.stringBelongsToLanguage("befx"));
 
     g.classifyGrammar();
+    Grammar g1 = fa.toGrammar();
+    g1.print();
     return 0;
 }

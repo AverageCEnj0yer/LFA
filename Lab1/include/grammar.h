@@ -7,7 +7,6 @@
 #include <set>
 #include "finiteAutomaton.h"
 
-
 using Symbol = std::string;
 using RHS = std::vector<Symbol>;
 using LHS = std::vector<Symbol>;

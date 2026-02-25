@@ -1,5 +1,5 @@
 #include "finiteAutomaton.h"
-
+#include "grammar.h"
 FiniteAutomaton::FiniteAutomaton(std::set<Symbol> states, std::set<Symbol> alphabet,
                     std::map<std::pair<Symbol, Symbol>, std::set<Symbol>> transitions,
                     Symbol initialState, std::set<Symbol> finalStates)
@@ -42,7 +42,6 @@ void FiniteAutomaton::print() const
             }
         }
     }
-    
 //this assumes that all symbols are a single character
 bool FiniteAutomaton::stringBelongsToLanguage(std::string_view input) const
 {
@@ -76,4 +75,51 @@ bool FiniteAutomaton::stringBelongsToLanguage(std::string_view input) const
     }
 
     return false;
+}
+
+Grammar FiniteAutomaton::toGrammar() const
+{
+    std::set<Symbol> terminals{};
+    std::set<Symbol> nonterminals{};
+    Symbol start{m_initialState};
+    std::vector<Production> productions{};
+
+    for (const auto& state : m_states)
+        if (state != "X")
+            nonterminals.insert(state);
+    
+    for (const auto& letter : m_alphabet)
+        terminals.insert(letter);
+    
+    for (const auto& p : m_transitions)
+    {
+        if (p.first.first == "X") continue; // skip transitions from X
+        for(const auto& symbol : p.second)
+        {
+            if (symbol == "X") 
+            {
+                // If destination is X (accepting), only add terminal production
+                Production temp{};
+                temp.lhs.push_back(p.first.first);
+                temp.rhs.push_back(p.first.second);
+                productions.push_back(temp);
+            }
+            else 
+            {
+                Production temp{};
+                temp.lhs.push_back(p.first.first);
+                temp.rhs.push_back(p.first.second);
+                // If destination is a final state, do not add the next state
+                if (m_finalStates.find(symbol) == m_finalStates.end()) 
+                {
+                    temp.rhs.push_back(symbol);
+                }
+                productions.push_back(temp);
+            }
+        }
+    }
+
+
+    return Grammar (terminals, nonterminals, start, productions);
+    
 }

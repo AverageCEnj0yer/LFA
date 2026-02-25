@@ -142,7 +142,7 @@ void Grammar::generateWord() const
     }
     std::cout << word;
 }
-
+//AKHFASBKJGNASSKMVOIAIWHBFAKSMDLASJFIAB
 void Grammar::classifyGrammar() const
 {
     // Flags for Chomsky classification
