@@ -22,6 +22,8 @@ class FiniteAutomaton
 
     //============LAB 2==============
     Grammar toGrammar() const;
+    bool isDeterministic() const;
+    FiniteAutomaton toDFA() const;
     //============LAB 2==============
 
     //getters

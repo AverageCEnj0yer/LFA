@@ -50,9 +50,14 @@ int main()
     assert(!fa.stringBelongsToLanguage("helpmeiamtired"));
     assert(!fa.stringBelongsToLanguage("bfee"));
     assert(!fa.stringBelongsToLanguage("befx"));
-
-    g.classifyGrammar();
-    Grammar g1 = fa.toGrammar();
-    g1.print();
+    
+    //=======test classify grammar============
+    // g.classifyGrammar();
+    //=======test toGrammar function=======
+    // Grammar g1 = fa.toGrammar();
+    // g1.print();
+    //======test isDeterministic function=====
+    // std::cout << std::boolalpha << fa.isDeterministic();
+    // fa.toDFA().print();
     return 0;
 }
