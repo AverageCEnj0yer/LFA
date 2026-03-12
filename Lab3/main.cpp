@@ -2,7 +2,7 @@
 #include "lexer.h"
 int main()
 {
-    Lexer lex{"test.lex"};
+    Lexer lex{"./tests/test2.lex"};
     lex.fileContent();
     Token t1{};
     while (!lex.isAtEnd())
