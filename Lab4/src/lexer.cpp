@@ -45,7 +45,7 @@ Token Lexer::getNextToken()
                 nextChar == '^') 
             {
                 advance(); // Skip the '/'
-                return literal(); 
+                return special(); 
             }
         }
         return literal(); // If bounds check fails or it's not a special char, just return the '/' as a literal
@@ -83,7 +83,6 @@ Token Lexer::special()
 {
     TokenType type;
     std::string val{m_currentChar};
-
     switch (m_currentChar) 
     {
         case '(': type = TokenType::LPAREN; break;

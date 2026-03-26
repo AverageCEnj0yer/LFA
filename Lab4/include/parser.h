@@ -14,10 +14,7 @@ class Parser
     void consume(TokenType expectedType);
 
     public:
-    Parser(Lexer& lexer) : m_lexer{lexer}
-    {
-        m_currentToken = m_lexer.getNextToken();
-    }
+    Parser(Lexer& lexer) : m_lexer{lexer} { m_currentToken = m_lexer.getNextToken(); }
     Node* parseExpression(); // OR
     Node* parseSequence();   // CONCAT
     Node* parseFactor();     // ?, *, +, ^nr

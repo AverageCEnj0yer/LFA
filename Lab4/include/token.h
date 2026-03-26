@@ -38,6 +38,7 @@ inline std::string tokenTypeToString(TokenType type) {
         case TokenType::LPAREN: return "LPAREN";
         case TokenType::RPAREN: return "RPAREN";
         case TokenType::PIPE: return "PIPE";
+        case TokenType::STAR: return "STAR";
         case TokenType::PLUS: return "PLUS";
         case TokenType::QUESTION: return "QUESTION";
         case TokenType::POWER: return "POWER";
