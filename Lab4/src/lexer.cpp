@@ -48,7 +48,7 @@ Token Lexer::getNextToken()
                 return literal(); 
             }
         }
-return literal(); // If bounds check fails or it's not a special char, just return the '/' as a literal
+        return literal(); // If bounds check fails or it's not a special char, just return the '/' as a literal
     }
 
     // 2. Handle Special Operators
