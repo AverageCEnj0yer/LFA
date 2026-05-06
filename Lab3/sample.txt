@@ -1,0 +1,19 @@
+int main()
+{
+    int x = 10;
+    float y = 3.14;
+    string msg = "hello";
+
+    x = x + 1;
+
+    bool result = x > 5 AND NOT false;
+
+    int z = add(x, y ^ 2);
+
+    {
+        int local = -42;
+        return local;
+    }
+
+    return 0;
+}

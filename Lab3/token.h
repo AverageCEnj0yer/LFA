@@ -51,6 +51,7 @@ enum class TokenType
     FLOAT_TYPE = -32,
     STRING_TYPE = -33,
     BOOL_TYPE = -34,
+    VOID_TYPE = -35,
 };
 
 struct Token
@@ -97,6 +98,7 @@ inline std::string tokenTypeToString(TokenType type) {
         case TokenType::FLOAT_TYPE: return "FLOAT_TYPE";
         case TokenType::STRING_TYPE: return "STRING_TYPE";
         case TokenType::BOOL_TYPE: return "BOOL_TYPE";
+        case TokenType::VOID_TYPE: return "VOID_TYPE";
         default: return "UNKNOWN";
     }
 }
