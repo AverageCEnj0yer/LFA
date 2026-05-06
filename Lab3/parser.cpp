@@ -5,16 +5,18 @@
 Parser::Parser(Lexer& lexer) : m_lexer(lexer)
 {
     // Pre-fill the two-token window
-    m_current = m_lexer.getNextToken();
-    m_next    = m_lexer.getNextToken();
+    m_current  = m_lexer.getNextToken();
+    m_next     = m_lexer.getNextToken();
+    m_nextNext = m_lexer.getNextToken();
 }
 
 //Token helpers
 Token Parser::advance()
 {
-    Token prev = m_current;
-    m_current  = m_next;
-    m_next     = m_lexer.getNextToken();
+    Token prev  = m_current;
+    m_current   = m_next;
+    m_next      = m_nextNext;
+    m_nextNext  = m_lexer.getNextToken();
     return prev;
 }
 
@@ -36,7 +38,8 @@ bool Parser::isTypeKeyword() const
     return check(TokenType::INT_TYPE)    ||
            check(TokenType::FLOAT_TYPE)  ||
            check(TokenType::STRING_TYPE) ||
-           check(TokenType::BOOL_TYPE);
+           check(TokenType::BOOL_TYPE)   ||
+           check(TokenType::VOID_TYPE);
 }
 
 //Top level
@@ -44,7 +47,19 @@ std::unique_ptr<ProgramNode> Parser::parse()
 {
     std::vector<ASTNodePtr> stmts;
     while (!check(TokenType::EOFILE))
-        stmts.push_back(parseStatement());
+    {
+        // TYPE IDENTIFIER "(" → function declaration
+        if (isTypeKeyword()
+            && checkNext(TokenType::IDENTIFIER)
+            && checkNextNext(TokenType::LPAREN))
+        {
+            stmts.push_back(parseFunctionDecl());
+        }
+        else
+        {
+            stmts.push_back(parseStatement());
+        }
+    }
     return std::make_unique<ProgramNode>(std::move(stmts));
 }
 
@@ -301,4 +316,63 @@ std::vector<ASTNodePtr> Parser::parseArgList()
         args.push_back(parseExpression());
 
     return args;
+}
+
+
+
+ASTNodePtr Parser::parseFunctionDecl()
+{
+    // returnType
+    std::string returnType = m_current.lexeme;
+    advance();
+
+    // name
+    std::string name = m_current.lexeme;
+    advance();
+
+    // "(" paramList ")"
+    expect(TokenType::LPAREN, "Expected '(' after function name");
+    auto params = parseParamList();
+    expect(TokenType::RPAREN, "Expected ')' after parameter list");
+
+    // body must be a block
+    if (!check(TokenType::LCBRACKET))
+        throw ParseError("Expected '{' to begin function body for '" + name + "'");
+
+    ASTNodePtr body = parseBlock();
+
+    return std::make_unique<FunctionDeclNode>(returnType, name,
+                                             std::move(params), std::move(body));
+}
+
+
+std::vector<std::unique_ptr<ParameterNode>> Parser::parseParamList()
+{
+    std::vector<std::unique_ptr<ParameterNode>> params;
+
+    if (check(TokenType::RPAREN))
+        return params; // void parameter list
+
+    // first parameter
+    if (!isTypeKeyword())
+        throw ParseError("Expected type in parameter list, got '" + m_current.lexeme + "'");
+
+    std::string typeName = m_current.lexeme;
+    advance();
+    Token nameToken = expect(TokenType::IDENTIFIER, "Expected parameter name after type");
+    params.push_back(std::make_unique<ParameterNode>(typeName, nameToken.lexeme));
+
+    // additional parameters
+    while (match(TokenType::COMMA))
+    {
+        if (!isTypeKeyword())
+            throw ParseError("Expected type after ',' in parameter list");
+
+        typeName = m_current.lexeme;
+        advance();
+        nameToken = expect(TokenType::IDENTIFIER, "Expected parameter name after type");
+        params.push_back(std::make_unique<ParameterNode>(typeName, nameToken.lexeme));
+    }
+
+    return params;
 }

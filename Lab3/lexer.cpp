@@ -199,6 +199,7 @@ Token Lexer::identifierOrKeyword()
     if (value == "float")  return Token{TokenType::FLOAT_TYPE, value};
     if (value == "string") return Token{TokenType::STRING_TYPE, value};
     if (value == "bool")   return Token{TokenType::BOOL_TYPE, value};
+    if (value == "void")   return Token{TokenType::VOID_TYPE, value};
 
     // boolean literals
     if (value == "true")  return Token{TokenType::TRUE, value};

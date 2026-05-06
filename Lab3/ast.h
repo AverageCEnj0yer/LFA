@@ -230,3 +230,50 @@ struct ProgramNode : ASTNode
             stmt->print(indent + 1);
     }
 };
+
+// A single function parameter: "int x"
+struct ParameterNode : ASTNode
+{
+    std::string typeName;
+    std::string paramName;
+
+    ParameterNode(std::string type, std::string name)
+        : typeName(std::move(type)), paramName(std::move(name)) {}
+
+    void print(int indent = 0) const override
+    {
+        printIndent(indent);
+        std::cout << "Param(" << typeName << " " << paramName << ")\n";
+    }
+};
+
+// A full function declaration: "int add(int a, int b) { ... }"
+struct FunctionDeclNode : ASTNode
+{
+    std::string                          returnType;
+    std::string                          name;
+    std::vector<std::unique_ptr<ParameterNode>> params;
+    ASTNodePtr                           body; // always a BlockNode
+
+    FunctionDeclNode(std::string returnType,
+                     std::string name,
+                     std::vector<std::unique_ptr<ParameterNode>> params,
+                     ASTNodePtr body)
+        : returnType(std::move(returnType))
+        , name(std::move(name))
+        , params(std::move(params))
+        , body(std::move(body)) {}
+
+    void print(int indent = 0) const override
+    {
+        printIndent(indent);
+        std::cout << "FunctionDecl(" << returnType << " " << name << ")\n";
+
+        printIndent(indent + 1);
+        std::cout << "Params\n";
+        for (const auto& p : params)
+            p->print(indent + 2);
+
+        body->print(indent + 1);
+    }
+};

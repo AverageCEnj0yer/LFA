@@ -44,29 +44,32 @@ class Parser
 {
 public:
     explicit Parser(Lexer& lexer);
-
     std::unique_ptr<ProgramNode> parse();
 
 private:
     Lexer& m_lexer;
-    Token  m_current;   // token being examined
-    Token  m_next;      // one token of lookahead
+    Token  m_current;
+    Token  m_next;
+    Token  m_nextNext;  // new (function support): needed to tell "int foo(" from "int foo ="
 
-    //Token helpers
     Token advance();
     Token expect(TokenType type, const std::string& errMsg);
-    bool  check    (TokenType type) const { return m_current.type == type; }
-    bool  checkNext(TokenType type) const { return m_next.type    == type; }
-    bool  match    (TokenType type);
+    bool  check        (TokenType type) const { return m_current.type  == type; }
+    bool  checkNext    (TokenType type) const { return m_next.type     == type; }
+    bool  checkNextNext(TokenType type) const { return m_nextNext.type == type; } // for function support
+    bool  match        (TokenType type);
     bool  isTypeKeyword() const;
 
-    //Grammar rules
+    // Statements
     ASTNodePtr parseStatement();
+    ASTNodePtr parseFunctionDecl();                                        // same as below
+    std::vector<std::unique_ptr<ParameterNode>> parseParamList();         // for function support
     ASTNodePtr parseVarDecl();
     ASTNodePtr parseReturnStmt();
     ASTNodePtr parseBlock();
     ASTNodePtr parseExprStmt();
 
+    // Expressions (unchanged)
     ASTNodePtr parseExpression();
     ASTNodePtr parseAssignment();
     ASTNodePtr parseLogicalOr();
@@ -78,6 +81,5 @@ private:
     ASTNodePtr parsePower();
     ASTNodePtr parseUnary();
     ASTNodePtr parsePrimary();
-
     std::vector<ASTNodePtr> parseArgList();
 };
